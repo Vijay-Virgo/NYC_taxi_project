@@ -4,7 +4,6 @@ from pathlib import Path
 parent_dir = str(Path(__file__).parent.parent)
 sys.path.append(parent_dir)
 
-
 import zipfile
 
 import folium
@@ -18,7 +17,7 @@ from streamlit_folium import st_folium
 
 from src.config import DATA_DIR
 from src.inference import fetch_next_hour_predictions, load_batch_of_features_from_store
-from src.plot_utils import plot_prediction
+from src.plot_utils import plot_aggregated_time_series as plot_prediction  # Aliased function
 
 # Add parent directory to Python path
 
@@ -286,6 +285,8 @@ top10 = (
 for location_id in top10:
     fig = plot_prediction(
         features=features[features["pickup_location_id"] == location_id],
-        prediction=predictions[predictions["pickup_location_id"] == location_id],
+        targets=predictions[predictions["pickup_location_id"] == location_id],
+        row_id=0,  # Choose an appropriate row_id for the plot
+        predictions=None,  # Add predictions here if you need them
     )
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
